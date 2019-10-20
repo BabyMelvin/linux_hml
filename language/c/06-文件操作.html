@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>06-文件操作</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<style type="text/css">
+.highlight  { background: #ffffff; }
+.highlight .c { color: #999988; font-style: italic } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { font-weight: bold } /* Keyword */
+.highlight .o { font-weight: bold } /* Operator */
+.highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
+.highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .gd .x { color: #000000; background-color: #ffaaaa } /* Generic.Deleted.Specific */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #999999 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .gi .x { color: #000000; background-color: #aaffaa } /* Generic.Inserted.Specific */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #aaaaaa } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { font-weight: bold } /* Keyword.Constant */
+.highlight .kd { font-weight: bold } /* Keyword.Declaration */
+.highlight .kp { font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #009999 } /* Literal.Number */
+.highlight .s { color: #d14 } /* Literal.String */
+.highlight .na { color: #008080 } /* Name.Attribute */
+.highlight .nb { color: #0086B3 } /* Name.Builtin */
+.highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
+.highlight .no { color: #008080 } /* Name.Constant */
+.highlight .ni { color: #800080 } /* Name.Entity */
+.highlight .ne { color: #990000; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #990000; font-weight: bold } /* Name.Function */
+.highlight .nn { color: #555555 } /* Name.Namespace */
+.highlight .nt { color: #000080 } /* Name.Tag */
+.highlight .nv { color: #008080 } /* Name.Variable */
+.highlight .ow { font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #009999 } /* Literal.Number.Float */
+.highlight .mh { color: #009999 } /* Literal.Number.Hex */
+.highlight .mi { color: #009999 } /* Literal.Number.Integer */
+.highlight .mo { color: #009999 } /* Literal.Number.Oct */
+.highlight .sb { color: #d14 } /* Literal.String.Backtick */
+.highlight .sc { color: #d14 } /* Literal.String.Char */
+.highlight .sd { color: #d14 } /* Literal.String.Doc */
+.highlight .s2 { color: #d14 } /* Literal.String.Double */
+.highlight .se { color: #d14 } /* Literal.String.Escape */
+.highlight .sh { color: #d14 } /* Literal.String.Heredoc */
+.highlight .si { color: #d14 } /* Literal.String.Interpol */
+.highlight .sx { color: #d14 } /* Literal.String.Other */
+.highlight .sr { color: #009926 } /* Literal.String.Regex */
+.highlight .s1 { color: #d14 } /* Literal.String.Single */
+.highlight .ss { color: #990073 } /* Literal.String.Symbol */
+.highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #008080 } /* Name.Variable.Class */
+.highlight .vg { color: #008080 } /* Name.Variable.Global */
+.highlight .vi { color: #008080 } /* Name.Variable.Instance */
+.highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
+.pl-c {
+    color: #969896;
+}
+
+.pl-c1,.pl-mdh,.pl-mm,.pl-mp,.pl-mr,.pl-s1 .pl-v,.pl-s3,.pl-sc,.pl-sv {
+    color: #0086b3;
+}
+
+.pl-e,.pl-en {
+    color: #795da3;
+}
+
+.pl-s1 .pl-s2,.pl-smi,.pl-smp,.pl-stj,.pl-vo,.pl-vpf {
+    color: #333;
+}
+
+.pl-ent {
+    color: #63a35c;
+}
+
+.pl-k,.pl-s,.pl-st {
+    color: #a71d5d;
+}
+
+.pl-pds,.pl-s1,.pl-s1 .pl-pse .pl-s2,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre,.pl-src,.pl-v {
+    color: #df5000;
+}
+
+.pl-id {
+    color: #b52a1d;
+}
+
+.pl-ii {
+    background-color: #b52a1d;
+    color: #f8f8f8;
+}
+
+.pl-sr .pl-cce {
+    color: #63a35c;
+    font-weight: bold;
+}
+
+.pl-ml {
+    color: #693a17;
+}
+
+.pl-mh,.pl-mh .pl-en,.pl-ms {
+    color: #1d3e81;
+    font-weight: bold;
+}
+
+.pl-mq {
+    color: #008080;
+}
+
+.pl-mi {
+    color: #333;
+    font-style: italic;
+}
+
+.pl-mb {
+    color: #333;
+    font-weight: bold;
+}
+
+.pl-md,.pl-mdhf {
+    background-color: #ffecec;
+    color: #bd2c00;
+}
+
+.pl-mdht,.pl-mi1 {
+    background-color: #eaffea;
+    color: #55a532;
+}
+
+.pl-mdr {
+    color: #795da3;
+    font-weight: bold;
+}
+
+.pl-mo {
+    color: #1d3e81;
+}
+.task-list {
+padding-left:10px;
+margin-bottom:0;
+}
+
+.task-list li {
+    margin-left: 20px;
+}
+
+.task-list-item {
+list-style-type:none;
+padding-left:10px;
+}
+
+.task-list-item label {
+font-weight:400;
+}
+
+.task-list-item.enabled label {
+cursor:pointer;
+}
+
+.task-list-item+.task-list-item {
+margin-top:3px;
+}
+
+.task-list-item-checkbox {
+display:inline-block;
+margin-left:-20px;
+margin-right:3px;
+vertical-align:1px;
+}
+</style>
+</head>
+<body>
+<h1 id="1-c-">1. c语言文件读写概念</h1>
+<h2 id="1-1-">1.1文件分类</h2>
+<ul>
+<li>按文件的逻辑结构：<ul>
+<li>记录文件：由具有一定结构的记录组成（定长和不定长）</li><li>流式文件：由一个个字符（字节）数据顺序组成</li></ul>
+</li><li>按存储介质：<ul>
+<li>普通文件：存储介质文件（磁盘、磁带等）</li><li>设备文件：非存储介质（键盘、显示器、打印机等）</li></ul>
+</li><li>按数据的组织形式：<ul>
+<li>文本文件： ASCII文件，每个字节存放一个字符的ASCII码</li><li>二进制文件：数据按其在内存中的存储形式原样存放</li></ul>
+</li></ul>
+<image src="./image/06-1.png"/>
+
+<ul>
+<li>文件处理方法<ul>
+<li>缓冲文件系统：高级文件系统，系统自动为正在使用的文件开辟内存缓冲区</li><li>非缓冲文件系统：低级文件系统，由用户在程序中为每个文件设定缓冲区</li></ul>
+</li></ul>
+<image src="./image/06-2.png"/>
+
+<ul>
+<li>缓冲文件系统理解：文件句柄</li></ul>
+<pre><code class="lang-c">typedef struct{
+    short level;  //缓冲区‘满&#39;或&#39;空&#39;
+    unsigned flags;//文件状态
+    char fd;       //文件描述符
+    unsigned char hold;//如无缓冲区不读取字符
+    short bsize;//缓冲区的大小
+    unsigned char *buffer;//数据缓冲区的位置
+    unsigned char *curp;//指针，当前指向
+    unsigned istemp;//临时文件，指示器
+    short    token;//用于有效检查
+}FILE;
+</code></pre>
+<h1 id="2-api">2.文件操作API</h1>
+<ul>
+<li>01）文件读写api<ul>
+<li><code>fgetc fputc</code>     按照字符读写文件</li><li><code>fputs fgets</code>      按照行读写文件 （读写</li></ul>
+</li><li>02）文件控制api    <ul>
+<li>文件是否结束</li><li>文配置文件）</li><li><code>fread fwirte</code>     按照块读写文件 （大数据块迁移）<br>件指针的定位、跳转</li><li><code>fseek(fp, 0L, SEEK_END);</code> //把文件指针从0位置开始，移动到文件末尾</li><li><code>length = ftell(fp);</code>//获取文件长度;</li></ul>
+</li></ul>
+<h2 id="2-1-">2.1标准文件的读写</h2>
+<h3 id="2-1-1-fopen-">2.1.1.文件的打开<code>fopen()</code></h3>
+<p>文件的打开操作表示将给用户指定的文件在内存分配一个FILE结构区，并将该结构的指针返回给用户程序，以后用户程序就可用此FILE指针来实现对指定文件的存取操作了。</p>
+<p>当使用打开函数时，必须给出文件名、文件操作方式(读、写或读写),如果该文件名不存在，就意味着建立(只对写文件而言，对读文件则出错)，并将文件指针指向文件开头。若已有一个同名文件存在，则删除该文件，若无同名文件，则建立该文件，并将文件指针指向文件开头。</p>
+<pre><code class="lang-c">fopen(char *filename,char *type);
+</code></pre>
+<p>其中<code>*filename</code>是要打开文件的文件名指针，一般用双引号括起来的文件名表示，也可使用双反斜杠隔开的路径名。而<code>*type</code>参数表示了对打开文件的操作方式。其可采用的操作方式如下：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;r&quot;</td>
+<td>打开，只读</td>
+</tr>
+<tr>
+<td>&quot;w&quot;</td>
+<td>打开，文件指针指到头，只写</td>
+</tr>
+<tr>
+<td>&quot;a&quot;</td>
+<td>打开，指向文件尾，在已存在文件中追加</td>
+</tr>
+<tr>
+<td>&quot;rb&quot;</td>
+<td>打开一个二进制文件，只读</td>
+</tr>
+<tr>
+<td>&quot;wb&quot;</td>
+<td>打开一个二进制文件，只写</td>
+</tr>
+<tr>
+<td>&quot;ab&quot;</td>
+<td>打开一个二进制文件，进行追加</td>
+</tr>
+<tr>
+<td>&quot;r+&quot;</td>
+<td>以读/写方式打开一个已存在的文件</td>
+</tr>
+<tr>
+<td>&quot;w+&quot;</td>
+<td>以读/写方式建立一个新的文本文件</td>
+</tr>
+<tr>
+<td>&quot;a+&quot;</td>
+<td>以读/写方式打开一个文件文件进行追加</td>
+</tr>
+<tr>
+<td>&quot;rb+&quot;</td>
+<td>以读/写方式打开一个二进制文件</td>
+</tr>
+<tr>
+<td>&quot;wb+&quot;</td>
+<td>以读/写方式建立一个新的二进制文件</td>
+</tr>
+<tr>
+<td>&quot;ab+&quot;</td>
+<td>以读/写方式打开一个二进制文件进行追加</td>
+</tr>
+</tbody>
+</table>
+<p>当用<code>fopen()</code>成功的打开一个文件时，该函数将返回一个FILE指针，如果文件打开失败，将返回一个NULL指针。</p>
+<h3 id="2-1-2-fclose-">2.1.2关闭文件函数fclose()</h3>
+<p>文件操作完成后，必须要用<code>fclose()</code>函数进行关闭，这是因为对打开的文件进行写入时，<strong>若文件缓冲区的空间未被写入的内容填满</strong>，<strong>这些内容不会写到打开的文件中去而丢失</strong>。</p>
+<p>只有对打开的文件进行关闭操作时，停留在文件缓冲区的内容才能写到该文件中去，从而使文件完整。再者一旦关闭了文件，该文件对应的FILE结构将被释放，从而使关闭的文件得到保护，因为这时对该文件的存取操作将不会进行。文件的关闭也意味着释放了该文件的缓冲区。</p>
+<pre><code class="lang-c">int fclose(FILE *stream);
+</code></pre>
+<p>它表示该函数将关闭FILE指针对应的文件，并返回一个整数值。若成功地关闭了文件，则返回一个0值，否则返回一个非0.</p>
+<p>当打开多个文件进行操作，而又要同时关闭时，可采用<code>fcloseall()</code>函数，它将<strong>关闭所有在程序中打开的文件</strong>。</p>
+<pre><code class="lang-c">int fcloseall();
+</code></pre>
+<p>该函数将关闭所有已打开的文件，将各文件缓冲区未装满的内容写到相应的文件中去，接着释放这些缓冲区，并返回关闭文件的数目。如关闭了4个文件，则当执行：</p>
+<pre><code class="lang-c">n = fcloseall();   //时，n应为4。
+</code></pre>
+<h2 id="2-2-">2.2.文件的读写</h2>
+<h3 id="2-2-1-">2.2.1.读写文件中字符的函数(一次只读写文件中的一个字符)：</h3>
+<pre><code class="lang-c">int fgetc(FILE *stream);
+int fgetchar(void);
+int fputc(int ch,FILE *stream);
+int fputchar(int ch);
+int getc(FILE *stream);
+int putc(int ch,FILE *stream);
+</code></pre>
+<p>其中fgetc()函数将把由流指针指向的文件中的一个字符读出，例如：</p>
+<pre><code class="lang-c"> ch =fgetc (fp);
+</code></pre>
+<p>将把流指针fp指向的文件中的一个字符读出，并赋给ch，当执行fgetc()函数时，若当时文件指针指到文件尾，即遇到文件结束标志EOF(其对应值为-1)，该函数返回一个-1给ch，在程序中常用检查该函数返回值是否为-1来判断是否已读到文件尾，从而决定是否继续。</p>
+<pre><code class="lang-c">#include &lt;stdio.h&gt;
+
+int main(){
+    FILE*fp;
+    char ch;
+    if(fp=fopen(&quot;myfile.txt&quot;,&quot;r&quot;)==NULL){
+          printf(&quot;file cannot be opend\n&quot;);
+      exit(-1);
+    }
+    while(ch=fgetc(fp)!=EOF){
+    fputc(ch,stdout);
+    }
+    fclose(fp);
+    return 0;
+}
+</code></pre>
+<p>在TC中，<code>putc()</code>等价于<code>fputc()</code>,<code>getc()</code>等价于<code>fgetc()</code>。<br><code>putchar(c)</code>相当于<code>fputc(c,stdout)</code>；<code>getchar()</code>相当于<code>fgetc(stdin)</code>。<br><strong>注意</strong>:这里使用<code>char ch</code>,其实是不科学的，因为最后判断结束标志时，是看<code>ch!=EOF</code>,而EOF的值为-1，这显然和char是不能比较的。所以，某些使用，我们都定义成<code>int ch</code>。</p>
+<h3 id="2-2-2-">2.2.2.读写文件中字符串的函数</h3>
+<pre><code class="lang-c">char *fgets(char *string,int n,FILE *stream);
+char *gets(char *s);
+int fprintf(FILE *stream,char *format,variable-list);
+int fputs(char *string,FILE *stream);
+int fscanf(FILE *stream,char *format,variable-list);
+</code></pre>
+<p>其中fgets()函数将把由流指针指定的文件中<code>n-1个</code>字符，读到由指针stream指向的字符数组中去，例如：</p>
+<pre><code class="lang-c">  fgets(buffer,9,fp);
+</code></pre>
+<p>将把fp指向的文件中的8个字符读到buffer内存区，buffer可以是定义的字符数组，也可以是动态分配的内存区。<br><strong>注意</strong>，fgets()函数读到&#39;\n&#39;就停止，而不管是否达到数目要求。同时在读取字符串的最后加上&#39;\0&#39;。</p>
+<p>fgets()函数执行完以后，返回一个指向该串的指针。如果读到文件尾或出错，则均返回一个空指针NULL，所以长用feof()函数来测定是否到了文件尾或者是ferror()函数来测试是否出错，例如下面的程序用fgets()函数读test.txt文件中的第一行并显示出来：</p>
+<pre><code class="lang-c">#include &lt;stdio.h&gt;
+int main(){
+    FILE*fp;
+    char str[128];
+    if((fp=fopen(&quot;text.txt&quot;,&quot;r&quot;))==NULL){
+        printf(&quot;cannot open file\n&quot;);
+        exit(1);
+    }
+    while(!feof(fp)){
+        if(fgets(str,128,fp)!=NULL){
+            printf(&quot;%s&quot;,str);
+        }
+    }
+    fclose(fp);
+    return 0;
+}
+</code></pre>
+<p><code>gets()</code>函数执行时，只要未遇到换行符或文件结束标志，将一直读下去。因此读到什么时候为止，需要用户进行控制，否则可能造成存储区的溢出。</p>
+<p><code>fputs()</code>函数想指定文件写入一个由string指向的字符串，<code>&#39;\0&#39;</code><strong>不写入文件</strong>。 </p>
+<p><code>fprintf()</code>和<code>fscanf()</code>同<code>printf()</code>和<code>scanf()</code>函数类似，不同之处就是<code>printf()</code>函数是想显示器输出，<code>fprintf()</code>则是向流指针指向的文件输出；<code>fscanf()</code>是从文件输入。</p>
+<p>下面程序是向文件test.dat里输入一些字符：</p>
+<pre><code class="lang-c">#include&lt;stdio.h&gt;
+main(){
+     char *s=&quot;That&#39;s good news&quot;;
+     int i=617;
+     FILE *fp;
+     fp=fopen(&quot;test.dat&quot;, &quot;w&quot;);   
+     fputs(&quot;Your score of TOEFLis&quot;,fp);   
+     fputc(&#39;:&#39;, fp);                      
+     fprintf(fp, &quot;%d\n&quot;, i);              
+     fprintf(fp, &quot;%s&quot;, s);                
+     fclose(fp);
+}
+</code></pre>
+<h2 id="2-3-">2.3.清除和设置文件缓冲区</h2>
+<h4 id="2-3-1-">2.3.1.清除文件缓冲区函数：</h4>
+<pre><code class="lang-c">int fflush(FILE *stream);
+int flushall();
+</code></pre>
+<p><code>fflush()</code>函数将清除由stream指向的文件缓冲区里的内容，常用于写完一些数据后，立即用该函数清除缓冲区，以免误操作时，破坏原来的数据。</p>
+<p><code>flushall()</code>将清除所有打开文件所对应的文件缓冲区。</p>
+<h4 id="2-3-2-">2.3.2.设置文件缓冲区函数</h4>
+<pre><code class="lang-c">void setbuf(FILE *stream,char *buf);
+void setvbuf(FILE *stream,char *buf,int type,unsigned size);
+</code></pre>
+<p>这两个函数将使得打开文件后，用户可建立自己的文件缓冲区，而不使用<code>fopen()</code>函数打开文件设定的默认缓冲区。       </p>
+<p>对于<code>setbuf()</code>函数，buf指出的缓冲区长度由头文件<code>stdio.h</code>中定义的宏<code>BUFSIZE</code>的值决定，缺省值为512字节。当选定buf为空时，setbuf函数将使的文件<code>I/O</code>不带缓冲。而对setvbuf函数，则由malloc函数来分配缓冲区。参数size指明了缓冲区的长度(必须大于0),而参数type则表示了缓冲的类型，其值可以取如下值：</p>
+<table>
+<thead>
+<tr>
+<th>type值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_IOFBF</td>
+<td>文件全部缓冲，即缓冲区装满后，才能对文件读写</td>
+</tr>
+<tr>
+<td>_IOLBF</td>
+<td>文件行缓冲，即缓冲区接收到一个换行符时，才能对文件读写</td>
+</tr>
+<tr>
+<td>_IONBF</td>
+<td>文件不缓冲，此时忽略buf,size的值，直接读写文件，不再经过文件缓冲区缓冲</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-4-">2.4 文件的随机读写函数</h2>
+<p>前面介绍的文件的字符/字符串读写，均是进行文件的顺序读写，即总是从文件的开头开始进行读写。这显然不能满足我们的要求，C语言提供了移动文件指针和随机读写的函数，它们是：</p>
+<h3 id="2-4-1-">2.4.1.移动文件指针函数：</h3>
+<pre><code class="lang-c">long ftell(FILE *stream);
+ int rewind(FILE *stream);
+ fseek(FILE *stream,long offset,int origin);
+</code></pre>
+<ul>
+<li>函数<code>ftell()</code>用来得到文件指针离文件开头的偏移量。当返回值是-1时表示出错。</li><li><code>rewind()</code>函数用于文件指针移到文件的开头，当移动成功时，返回0，否则返回一个非0值。</li><li><code>fseek()</code>函数用于把文件指针以origin为起点移动offset个字节，其中origin指出的位置可有以下几种：</li></ul>
+<table>
+<thead>
+<tr>
+<th>origin</th>
+<th>数值</th>
+<th>代表的具体位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SEEK_SET</td>
+<td>0</td>
+<td>文件开头</td>
+</tr>
+<tr>
+<td>SEEK_CUR</td>
+<td>1</td>
+<td>文件指针当前位置</td>
+</tr>
+<tr>
+<td>SEEK_END</td>
+<td>2</td>
+<td>文件尾</td>
+</tr>
+</tbody>
+</table>
+<p>例如：</p>
+<pre><code class="lang-c">  fseek(fp,10L,0);
+</code></pre>
+<p>把文件指针从文件开头移到第10字节处，由于offset参数要求是长整型数，故其数后带L。</p>
+<pre><code class="lang-c">fseek(fp,-15L,2);
+</code></pre>
+<p>把文件指针从文件尾向前移动15字节。</p>
+<h3 id="2-4-2-">2.4.2 文件随机读写函数</h3>
+<pre><code class="lang-c">int fread(void *ptr,int size,int nitems,FILE *stream);
+int fwrite(void *ptr,int size,int nitems,FILE *stream);
+</code></pre>
+<p><code>fread()</code>函数从流指针指定的文件中读取<code>nitems</code>个数据项，每个数据项的长度为size个字节，读取的<strong>nitems数据项</strong>存入由ptr指针指向的内存缓冲区中，<br>在执行<code>fread()</code>函数时，文件指针随着读取的字节数而向后移动，最后移动结束的位置等于实际读出的字节数。</p>
+<p>该函数执行结束后，将返回实际读出的<strong>数据项数</strong>，这个<strong>数据项数</strong>不一定等于<strong>设置的nitems</strong>，因为若文件中没有足够的数据项，或读中间出错，都会导致返回的数据项数少于设置的nitems。当返回数不等于nitems时，可以用<code>feof()</code>或<code>ferror()</code>函数进行检查。</p>
+<p><code>fwrite()</code>函数从ptr指向的缓冲区中取出长度为size字节的<strong>nitems个数据项</strong>，写入到流指针stream指向的文件中，执行该操作后，文件指针将向后移动，<br>移动的字节数等于写入文件的字节数目。该函数操作完成后，也将返回写入的数据项数。</p>
+<h1 id="3-">3. 非标准文件的读写</h1>
+<p>这类函数最早用于UNIX操作系统,ANSI标准未定义,但有时也经常用到,DOS 3.0以上版本支持这些函数。它们的头文件为io.h。<br>由于我们不常用这些函数，所以在这里就简单说一下。</p>
+<h2 id="3-1-">3.1.文件的打开和关闭</h2>
+<p><code>open()</code>函数的作用是打开文件,其调用格式为:</p>
+<pre><code class="lang-c">int open(char *filename, int access);
+</code></pre>
+<p>该函数表示按access的要求打开名为filename的文件,返回值为文件描述字,其中access有两部分内容:<br>基本模式和修饰符, 两者用&quot; &quot;(&quot;或&quot;)方式连接。修饰符可以有多个, 但基本模式只能有一个。     </p>
+<table>
+<thead>
+<tr>
+<th>基本模式</th>
+<th>含义</th>
+<th>修饰符</th>
+<th>含    义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O_RDONLY</td>
+<td>只读</td>
+<td>O_APPEND</td>
+<td>文件指针指向末尾</td>
+</tr>
+<tr>
+<td>O_WRONLY</td>
+<td>只写</td>
+<td>O_CREAT</td>
+<td>文件不存在时创建文件, 属性按基本模式属性</td>
+</tr>
+<tr>
+<td>O_RDWR</td>
+<td>读写</td>
+<td>O_TRUNC</td>
+<td>若文件存在, 将其长度缩为0, 属性不变</td>
+</tr>
+<tr>
+<td>O_BINARY</td>
+<td>打开一个二进制文件</td>
+<td>O_TEXT</td>
+<td>打开一个文字文件</td>
+</tr>
+</tbody>
+</table>
+<p><code>open()</code>函数打开成功, 返回值就是文件描述字的值(非负值), 否则返回-1。<br><code>close()</code>函数的作用是关闭由open()函数打开的文件, 其调用格式为:</p>
+<pre><code class="lang-c">    int close(int handle);
+</code></pre>
+<p>该函数关闭文件描述字handle相连的文件。</p>
+<h2 id="3-2-">3.2.读写函数</h2>
+<pre><code class="lang-c"> int read(int handle, void *buf, int count);
+</code></pre>
+<p> <code>read()</code>函数从handle(文件描述字)相连的文件中, 读取count个字节放到buf所指的缓冲区中,返回值为实际所读字节数, 返回-1表示出错。返回0 表示文件结束。</p>
+<p> <code>write()</code>函数的调用格式为:</p>
+<pre><code class="lang-c"> int write(int handle, void *buf, int count);
+</code></pre>
+<p><code>write()</code>函数把count个字节从buf指向的缓冲区写入与handle相连的文件中, 返回值为实际写入的字节数。</p>
+<h2 id="3-3-">3.3 随机定位函数</h2>
+<p><code>lseek()</code>函数的调用格式为:</p>
+<pre><code class="lang-c">  int lseek(int handle, long offset, int fromwhere);
+</code></pre>
+<p>该函数对与handle相连的文件位置指针进行定位,功能和用法与fseek()函数相同。</p>
+<p><code>tell()</code>函数的调用格式为:</p>
+<pre><code>  long tell(int handle);
+</code></pre><p>该函数返回与handle相连的文件现生位置指针, 功能和用法与<code>ftell()</code>相同</p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

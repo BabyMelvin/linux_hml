@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>03-线程和锁</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<style type="text/css">
+.highlight  { background: #ffffff; }
+.highlight .c { color: #999988; font-style: italic } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { font-weight: bold } /* Keyword */
+.highlight .o { font-weight: bold } /* Operator */
+.highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
+.highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .gd .x { color: #000000; background-color: #ffaaaa } /* Generic.Deleted.Specific */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #999999 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .gi .x { color: #000000; background-color: #aaffaa } /* Generic.Inserted.Specific */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #aaaaaa } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { font-weight: bold } /* Keyword.Constant */
+.highlight .kd { font-weight: bold } /* Keyword.Declaration */
+.highlight .kp { font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #009999 } /* Literal.Number */
+.highlight .s { color: #d14 } /* Literal.String */
+.highlight .na { color: #008080 } /* Name.Attribute */
+.highlight .nb { color: #0086B3 } /* Name.Builtin */
+.highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
+.highlight .no { color: #008080 } /* Name.Constant */
+.highlight .ni { color: #800080 } /* Name.Entity */
+.highlight .ne { color: #990000; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #990000; font-weight: bold } /* Name.Function */
+.highlight .nn { color: #555555 } /* Name.Namespace */
+.highlight .nt { color: #000080 } /* Name.Tag */
+.highlight .nv { color: #008080 } /* Name.Variable */
+.highlight .ow { font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #009999 } /* Literal.Number.Float */
+.highlight .mh { color: #009999 } /* Literal.Number.Hex */
+.highlight .mi { color: #009999 } /* Literal.Number.Integer */
+.highlight .mo { color: #009999 } /* Literal.Number.Oct */
+.highlight .sb { color: #d14 } /* Literal.String.Backtick */
+.highlight .sc { color: #d14 } /* Literal.String.Char */
+.highlight .sd { color: #d14 } /* Literal.String.Doc */
+.highlight .s2 { color: #d14 } /* Literal.String.Double */
+.highlight .se { color: #d14 } /* Literal.String.Escape */
+.highlight .sh { color: #d14 } /* Literal.String.Heredoc */
+.highlight .si { color: #d14 } /* Literal.String.Interpol */
+.highlight .sx { color: #d14 } /* Literal.String.Other */
+.highlight .sr { color: #009926 } /* Literal.String.Regex */
+.highlight .s1 { color: #d14 } /* Literal.String.Single */
+.highlight .ss { color: #990073 } /* Literal.String.Symbol */
+.highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #008080 } /* Name.Variable.Class */
+.highlight .vg { color: #008080 } /* Name.Variable.Global */
+.highlight .vi { color: #008080 } /* Name.Variable.Instance */
+.highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
+.pl-c {
+    color: #969896;
+}
+
+.pl-c1,.pl-mdh,.pl-mm,.pl-mp,.pl-mr,.pl-s1 .pl-v,.pl-s3,.pl-sc,.pl-sv {
+    color: #0086b3;
+}
+
+.pl-e,.pl-en {
+    color: #795da3;
+}
+
+.pl-s1 .pl-s2,.pl-smi,.pl-smp,.pl-stj,.pl-vo,.pl-vpf {
+    color: #333;
+}
+
+.pl-ent {
+    color: #63a35c;
+}
+
+.pl-k,.pl-s,.pl-st {
+    color: #a71d5d;
+}
+
+.pl-pds,.pl-s1,.pl-s1 .pl-pse .pl-s2,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre,.pl-src,.pl-v {
+    color: #df5000;
+}
+
+.pl-id {
+    color: #b52a1d;
+}
+
+.pl-ii {
+    background-color: #b52a1d;
+    color: #f8f8f8;
+}
+
+.pl-sr .pl-cce {
+    color: #63a35c;
+    font-weight: bold;
+}
+
+.pl-ml {
+    color: #693a17;
+}
+
+.pl-mh,.pl-mh .pl-en,.pl-ms {
+    color: #1d3e81;
+    font-weight: bold;
+}
+
+.pl-mq {
+    color: #008080;
+}
+
+.pl-mi {
+    color: #333;
+    font-style: italic;
+}
+
+.pl-mb {
+    color: #333;
+    font-weight: bold;
+}
+
+.pl-md,.pl-mdhf {
+    background-color: #ffecec;
+    color: #bd2c00;
+}
+
+.pl-mdht,.pl-mi1 {
+    background-color: #eaffea;
+    color: #55a532;
+}
+
+.pl-mdr {
+    color: #795da3;
+    font-weight: bold;
+}
+
+.pl-mo {
+    color: #1d3e81;
+}
+.task-list {
+padding-left:10px;
+margin-bottom:0;
+}
+
+.task-list li {
+    margin-left: 20px;
+}
+
+.task-list-item {
+list-style-type:none;
+padding-left:10px;
+}
+
+.task-list-item label {
+font-weight:400;
+}
+
+.task-list-item.enabled label {
+cursor:pointer;
+}
+
+.task-list-item+.task-list-item {
+margin-top:3px;
+}
+
+.task-list-item-checkbox {
+display:inline-block;
+margin-left:-20px;
+margin-right:3px;
+vertical-align:1px;
+}
+</style>
+</head>
+<body>
+<h1 id="java-">java中线程的实现</h1>
+<h2 id="1-java-">1.Java 中实现线程两种手段：</h2>
+<ul>
+<li>一种是继承Thread类    </li><li>一种就是实现Runnable接口。</li></ul>
+<pre><code class="lang-java">//构造函数
+public Thread(Runnable target);
+public Thread(Runnable target,String name)
+public Thread(String name）
+//目前正在执行线程
+public static Thread currentThread()
+//线程名
+public final String getName()
+//优先级
+public final int getPriority()
+//判断是否被中断，如果是true，否则为false
+public boolean isInterrupted()
+//是否在活动
+public final boolean isAlive()
+//等待线程死亡
+public final void join() throws InterrruptedException 
+//等待mills毫秒后，线程死亡
+public final synchronized void join(long millis) throws InterruputedException
+//设置线程名称
+public final void setName(String name)
+public final void setPriority(int newPriority)
+//当前线程休眠
+public static void sleep(long miils) throws InterruptedException
+//开始执行线程
+public void start()
+//返回代表线程的字符串
+public String toString()
+//将目前正在执行线程暂停，允许其他执行
+public static void yield()
+//将一个线程设置成后台运行
+public final void setDaemon(boolean on)
+</code></pre>
+<ul>
+<li>3种优先级</li></ul>
+<pre><code class="lang-java">public static final int MIN_PRIORITY -&gt;1
+public static final int NORM_PRIORITY -&gt;5
+public static final int MAX_PRIORITY  -&gt;10
+</code></pre>
+<ul>
+<li>继承Thread类</li></ul>
+<pre><code class="lang-java">class Mythread extends Thread{
+    属性...;
+    方法...;
+    public void run(){//覆写Thread 的run()方法，线程的主体
+    }
+}
+</code></pre>
+<ul>
+<li>实例化 <code>Mythread m1=new MyThread(&quot;thread A&quot;);</code></li><li><code>m1.start();</code>//run方法调用没有启动线程.直接继承Thread,重复调用start会出现IleagalThreadStateException();</li><li>一个类只能继承Thread类才能实现多线程，必定受到单继承局限的影响。一般实现多线程，需要通过Runnable接口完成。</li><li>Runnable 接口</li></ul>
+<pre><code class="lang-java">class MyThread implements Runnable{
+    属性...;
+    方法...;
+    public void run(){//覆写Thread 的run()方法，线程的主体
+    }
+}
+</code></pre>
+<ul>
+<li><code>MyThread m1 =new MyThread(&quot;thread A&quot;);</code></li><li><code>MyThread m2 =new MyThread(&quot;thread B&quot;);</code></li><li><code>Thread t1=new Thread(m1);</code></li><li><code>Thread t2=new Thread(m2);</code></li><li><code>t1.start(）;</code></li><li><code>t2.start();</code></li><li>Runnale接口和Thread类<ul>
+<li>之间的联系</li></ul>
+</li></ul>
+<pre><code>public class Thread extends Object implements Runnable
+</code></pre><h3 id="thread-">Thread不能共享资源</h3>
+<p>Thread不能共享资源，因为有多个对象执行在不同的线程中。</p>
+<pre><code class="lang-java">class MyThread extends Thread{
+    private int ticket=5;
+    public void run(){
+        for(int i=0;i&lt;100;i++){
+            if(ticket&gt;0){
+                System.out.println(&quot;卖票：ticket=&quot;+ticket--);
+            }
+        }
+    }
+}
+public class ThreadDemo4{
+    public static void main(String args[]){
+        MyThread mt1=new MyThread();
+        MyThread mt2=new MyThread();
+        MyThread mt3=new MyThread();
+        mt1.start();
+        mt2.start();
+        mt3.start();
+    }
+}
+//5,4,3,2,1 5,4,3,2,1,5,4,3,2,1
+</code></pre>
+<h3 id="runnable-">Runnable能够实现资源共享</h3>
+<pre><code class="lang-java">class MyThread implements Runnable{
+    private int ticket=5;
+    public void run(){
+        for(int i=0;i&lt;100;i++){
+            if(ticket&gt;0){
+                System.out.println(&quot;卖票：ticket=&quot;+ticket--);
+            }
+        }
+    }
+}
+public class RunnableDemo02{
+    public  static void main(String args[]){
+        MyThread my=new MyThread();
+        //启动三个线程
+        new Thread(my).start();
+        new Thread(my).start();
+        new Thread(my).start();
+    }
+}
+//结果5,4,3,2,1
+</code></pre>
+<ul>
+<li>Thread类也是Runnable接口的子类</li><li>之间的区别<ul>
+<li>如果一个类继承Thread类，则不适合于多个线程共享资源。</li><li>实现Runnable接口，就可以方便地实现资源的共享。</li></ul>
+</li><li>Runnbale接口相对于Thread类，优势(<strong>建议使用Runnable</strong>)：<ul>
+<li>适合多个相同的代码的线程，处理同一个资源的情况。</li><li>可以避免Java单继承带来的局限</li><li>增强程序的健壮性，代码能够被多个线程共享，代码与数据是独立的。使用Runnable实现多线程。</li></ul>
+</li><li>线程的状态<ul>
+<li>创建状态：有相应内存空间和其他资源，Thread <code>thread =new Thread();</code></li><li>就绪状态：<code>start()</code>启动线程，启动时候就进入就绪状态。</li><li>运行状态：就绪被调用，获得处理器资源的时候，进去运行状态。自动调用<code>run()</code>方法。</li><li>堵塞状态：正在执行，某种原因被挂起，CPU暂停终止。<code>sleep()</code>,<code>suspend()</code>,<code>wait()</code>线程进入堵塞的状态。</li><li>死亡状态：<code>stop()</code>或者<code>run()</code>执行完成。</li></ul>
+</li><li>至少启动两个线程，<code>main</code>和<code>垃圾回收</code></li></ul>
+<h3 id="-join">线程强制运行join</h3>
+<p>使用<code>join()</code>方法让一个线程强制运行，线程强制运行期间，其他线程无法运行，必须等待次线程完成之后才能继续执行。</p>
+<h3 id="-">中断线程</h3>
+<p>调用<code>interrupt()</code>方法能够线程终止。</p>
+<pre><code class="lang-java">class MyThread implements Runnable{
+    public void run(){
+        System.out.println(&quot;1,进入run方法&quot;);
+        try{
+            //休眠10s
+            Thread.sleep(100000);
+            System.out.println(&quot;2,已经休眠完成&quot;);
+        }catch(Exception e){
+            System.out.println(&quot;3，休眠被终止&quot;);
+            return;//让程序返回调用处
+        }
+        System.out.println(&quot;4,run方法正常结束&quot;);
+    }
+};
+public class ThreadInterrputDemo{
+    public static void main(String args[]){
+        MyThread mt=new MyThread();
+        Thread t=new Thread(mt,&quot;线程&quot;);
+        t.start();
+        try{
+            //停2s再继续中断
+            Thread.sleep(2000);
+        }catch(Exception e){
+        }
+        //中断线程执行
+        t.interrupt();
+    }
+}
+</code></pre>
+<h3 id="-">后台线程</h3>
+<p>Java程序中，只要前台有一个线程运行，整个java进程都不会消失。可以设置一个java后台线程，这样即使java程序结束了，后台线程依然会继续执行。<br>使用<code>setDaemon()</code>来实现后台线程。</p>
+<pre><code class="lang-java">public class ThreadInterrputDemo{
+    public static void main(String args[]){
+        MyThread mt=new MyThread();
+        Thread t=new Thread(mt,&quot;线程&quot;);
+        t.setDaemon(true);
+        t.start();
+    }
+}
+</code></pre>
+<h2 id="2-">2.同步与死锁</h2>
+<ul>
+<li>解决资源共享的同步操作，可以使用同步代码块和同步方法两种方式。</li><li>同步代码块</li></ul>
+<pre><code class="lang-java">synchronized(同步对象){
+    需要同步的代码；
+}
+</code></pre>
+<ul>
+<li><code>synchronized(this){}</code></li><li>同步方法</li></ul>
+<pre><code>sychronized 返回值 方法名称（参数列表){
+}
+</code></pre><ul>
+<li><p>方法的完整格式</p>
+</li><li><p><code>public final static sychronzed void fun(int i) throws Exception1,Exception2</code></p>
+</li></ul>
+<h2 id="object-">Object 类对线程的支持----等待于唤醒</h2>
+<ul>
+<li>作为所有类的父类，这几种方法对线程支持</li></ul>
+<pre><code class="lang-java">//线程等待
+public final void wait（）throws InterruptedException
+//线程等待，指定等待最长时间
+public final void wait(long timeout)throws InterruptedException
+public final void notify()//换新第一个等待的线程
+public final void nootifyAll()//唤醒所有的线程
+</code></pre>
+<h3 id="-">线程的生命周期</h3>
+<p><a href="image/01-01.jpg">线程声明周期</a></p>
+<p>其中<code>yield()</code>暂时暂停当前线程，让给其他线程执行。</p>
+<ul>
+<li><code>suspend()</code>:暂时挂起线程。</li><li><code>resume()</code>:恢复挂起的线程</li><li><code>stop（）</code>：停止线程</li><li>都是用了<code>@Deprecated</code>声明，表示不建议使用。</li></ul>
+<p>停止线程，开发过程常用一个开发的标志位：</p>
+<pre><code class="lang-java">class MyThread implements Runnable{
+    private boolean flag=true;
+    public void run(){
+        int i=0;
+        while(this.flag){
+            while(true){
+                System.out.println(Thread.currentThread().getNanme+&quot;运行&quot;+&quot;i = &quot;+(i++));
+            }
+        }
+    }
+    public void stop(){
+        this.flag=false;
+    }
+}
+</code></pre>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

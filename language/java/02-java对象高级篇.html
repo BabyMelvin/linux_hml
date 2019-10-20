@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>02-java对象高级篇</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<style type="text/css">
+.highlight  { background: #ffffff; }
+.highlight .c { color: #999988; font-style: italic } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { font-weight: bold } /* Keyword */
+.highlight .o { font-weight: bold } /* Operator */
+.highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
+.highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .gd .x { color: #000000; background-color: #ffaaaa } /* Generic.Deleted.Specific */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #999999 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .gi .x { color: #000000; background-color: #aaffaa } /* Generic.Inserted.Specific */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #aaaaaa } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { font-weight: bold } /* Keyword.Constant */
+.highlight .kd { font-weight: bold } /* Keyword.Declaration */
+.highlight .kp { font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #009999 } /* Literal.Number */
+.highlight .s { color: #d14 } /* Literal.String */
+.highlight .na { color: #008080 } /* Name.Attribute */
+.highlight .nb { color: #0086B3 } /* Name.Builtin */
+.highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
+.highlight .no { color: #008080 } /* Name.Constant */
+.highlight .ni { color: #800080 } /* Name.Entity */
+.highlight .ne { color: #990000; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #990000; font-weight: bold } /* Name.Function */
+.highlight .nn { color: #555555 } /* Name.Namespace */
+.highlight .nt { color: #000080 } /* Name.Tag */
+.highlight .nv { color: #008080 } /* Name.Variable */
+.highlight .ow { font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #009999 } /* Literal.Number.Float */
+.highlight .mh { color: #009999 } /* Literal.Number.Hex */
+.highlight .mi { color: #009999 } /* Literal.Number.Integer */
+.highlight .mo { color: #009999 } /* Literal.Number.Oct */
+.highlight .sb { color: #d14 } /* Literal.String.Backtick */
+.highlight .sc { color: #d14 } /* Literal.String.Char */
+.highlight .sd { color: #d14 } /* Literal.String.Doc */
+.highlight .s2 { color: #d14 } /* Literal.String.Double */
+.highlight .se { color: #d14 } /* Literal.String.Escape */
+.highlight .sh { color: #d14 } /* Literal.String.Heredoc */
+.highlight .si { color: #d14 } /* Literal.String.Interpol */
+.highlight .sx { color: #d14 } /* Literal.String.Other */
+.highlight .sr { color: #009926 } /* Literal.String.Regex */
+.highlight .s1 { color: #d14 } /* Literal.String.Single */
+.highlight .ss { color: #990073 } /* Literal.String.Symbol */
+.highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #008080 } /* Name.Variable.Class */
+.highlight .vg { color: #008080 } /* Name.Variable.Global */
+.highlight .vi { color: #008080 } /* Name.Variable.Instance */
+.highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
+.pl-c {
+    color: #969896;
+}
+
+.pl-c1,.pl-mdh,.pl-mm,.pl-mp,.pl-mr,.pl-s1 .pl-v,.pl-s3,.pl-sc,.pl-sv {
+    color: #0086b3;
+}
+
+.pl-e,.pl-en {
+    color: #795da3;
+}
+
+.pl-s1 .pl-s2,.pl-smi,.pl-smp,.pl-stj,.pl-vo,.pl-vpf {
+    color: #333;
+}
+
+.pl-ent {
+    color: #63a35c;
+}
+
+.pl-k,.pl-s,.pl-st {
+    color: #a71d5d;
+}
+
+.pl-pds,.pl-s1,.pl-s1 .pl-pse .pl-s2,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre,.pl-src,.pl-v {
+    color: #df5000;
+}
+
+.pl-id {
+    color: #b52a1d;
+}
+
+.pl-ii {
+    background-color: #b52a1d;
+    color: #f8f8f8;
+}
+
+.pl-sr .pl-cce {
+    color: #63a35c;
+    font-weight: bold;
+}
+
+.pl-ml {
+    color: #693a17;
+}
+
+.pl-mh,.pl-mh .pl-en,.pl-ms {
+    color: #1d3e81;
+    font-weight: bold;
+}
+
+.pl-mq {
+    color: #008080;
+}
+
+.pl-mi {
+    color: #333;
+    font-style: italic;
+}
+
+.pl-mb {
+    color: #333;
+    font-weight: bold;
+}
+
+.pl-md,.pl-mdhf {
+    background-color: #ffecec;
+    color: #bd2c00;
+}
+
+.pl-mdht,.pl-mi1 {
+    background-color: #eaffea;
+    color: #55a532;
+}
+
+.pl-mdr {
+    color: #795da3;
+    font-weight: bold;
+}
+
+.pl-mo {
+    color: #1d3e81;
+}
+.task-list {
+padding-left:10px;
+margin-bottom:0;
+}
+
+.task-list li {
+    margin-left: 20px;
+}
+
+.task-list-item {
+list-style-type:none;
+padding-left:10px;
+}
+
+.task-list-item label {
+font-weight:400;
+}
+
+.task-list-item.enabled label {
+cursor:pointer;
+}
+
+.task-list-item+.task-list-item {
+margin-top:3px;
+}
+
+.task-list-item-checkbox {
+display:inline-block;
+margin-left:-20px;
+margin-right:3px;
+vertical-align:1px;
+}
+</style>
+</head>
+<body>
+<h1 id="-">面向对象</h1>
+<h2 id="1-">1.继承</h2>
+<ul>
+<li><strong>只允许多层继承</strong>，<strong>不能多重继承</strong><ul>
+<li>java中只允许单继承，不能使用多重继承。<strong>一个子类只能继承一个父类</strong>。</li><li>子类实例化的过程：子类对象实例化之前首先调用父类的构造方法，再调用子类自己的构造方法。</li><li>方法覆写：<ul>
+<li>子类对父类方法，方法同名。<strong>但是子类的权限不能比父类更严格</strong>。</li><li>重载，发生在同一类。复写，发生在继承关系中。</li><li><code>this</code>，访问本类的属性，没有从父类查找。<code>super</code>访问父类的属性，调用构造方法时候，需放在首行。</li></ul>
+</li></ul>
+</li><li><strong>final关键字</strong><ul>
+<li>使用final声明的类<strong>不能有子类</strong></li><li>使用final声明方法不能被子类所覆写</li><li>使用final声明的变量即常量，<strong>常量不可以修改</strong></li></ul>
+</li><li>抽象类<ul>
+<li>包含一个抽象方法的类必须是<strong>抽象类</strong></li><li>抽象类和方法都用abstract声明</li><li>抽象方法只需要声明不需要实现</li><li>抽象类必须被子类继承，该子类不是抽象类，必须继承所有的抽象方法（不能使用private方法）</li></ul>
+</li><li>接口的基本概念<ul>
+<li>全局常量和公共的抽象方法所组成。</li></ul>
+</li></ul>
+<pre><code class="lang-java">其中不写public 也是默认全局
+interface A{
+    public static final String name=&quot;heo&quot;;
+    public abstract void print();
+    public abstaract String getInfo();
+}
+</code></pre>
+<ul>
+<li><p>可以同时实现多个接口，但是实现要所有的抽象方法。</p>
+<h1 id="2-">2.多态</h1>
+</li><li>Java中面向对象主要体现：<ul>
+<li>方法的重载与覆写</li><li>对象的多态性（两种类型）<ul>
+<li>向上转型：<code>子类对象-&gt;父类对象</code></li><li>向下转型：<code>父类对象-&gt;子类对象</code></li></ul>
+</li><li>对于向上转型，程序自动完成。向下转型，必须声明要传递子类的类型。</li></ul>
+</li></ul>
+<pre><code>对象向上转型：父类 父类对象=子类实例
+对象向下转型：子类 子类对象=（子类）父类实例
+</code></pre><ul>
+<li><code>class B extends A</code></li></ul>
+<pre><code class="lang-java">B b=new B();定义子类实例对象
+A a=b;发生向上转型关系，子类---&gt;父类
+-----------------------------------
+A a=new B();发生向上转型关系，子类---&gt;父类
+B b=(B)a; 此时发生向下转型。
+</code></pre>
+<ul>
+<li>再设计的过程中，<strong>永远不要去继承一个已经实现好的类</strong>，只能继承抽象类或者实现接口。<strong>一旦发生对象向上传递关系后</strong>，<strong>方法被子类所覆写</strong>。</li></ul>
+<h2 id="3-instanceof-">3.instanceof关键字</h2>
+<ul>
+<li>返回boolean类型(<code>a2 instanceof A</code>)</li></ul>
+<h2 id="4-object-">4.Object 类</h2>
+<ul>
+<li>java中多有的类都有一个公共的父类Object，一个子类只要没有明显继承一个父类，则肯定是Object类的子类</li><li>Object中的主要方法</li></ul>
+<pre><code class="lang-java">public boolean equals(Object obj);对象的比较
+public int hashCode();取得Hash码
+public String toString();对象打印调用
+</code></pre>
+<ul>
+<li><code>toString().b</code>和<code>b.toString()</code>调用的结果一样。</li><li>子类中复写Object类中<code>toString()</code>方法，这样直接输出对象调用的是被子类覆写过的<code>toString()</code>方法.</li><li><code>equals()</code>方法默认的是比较地址，并不能对内同进行比较。</li><li>很多类库设计都采用Object作为方法的参数，这样比较方便。</li></ul>
+<h2 id="5-">5.包装类</h2>
+<ul>
+<li>java一切事物皆对象</li><li>基本工作类型<h3 id="-">匿名类部内</h3>
+<h1 id="-">异常基本概念</h1>
+</li></ul>
+<pre><code class="lang-java">    try{
+    }catch(){
+    }catch(){
+    }finally{
+    }
+</code></pre>
+<ul>
+<li>catch中寻找匹配的，<strong>不管程序是否产生异常</strong>，<strong>肯定会执行finally语句</strong>。没有finally,则跳到<code>finally之后</code>执行.</li><li>Java中异常结构，最常用的类分别是<code>Exception</code>和<code>Error</code>,都是<code>Throwable</code>的子类。<ul>
+<li>Exception：程序中出错，可以用<code>try....catch</code></li><li><code>Error</code>:<strong>JVM错误</strong>，程序无法处理.</li></ul>
+</li><li><code>throws</code> 和 <code>throw</code>关键字<ul>
+<li><code>throws</code>定义一个方法，表示此方法不处理异常，交给调用处理。</li><li><code>throw</code>抛出一个异常，抛出异常的实例化对象。<code>throw new Exception(&quot;自己抛出异常&quot;);</code></li><li>finally语句块作为异常处理的统一出口，避免像<code>throw</code>或<code>return</code>语句。</li></ul>
+</li><li><code>Exception</code>和<code>RuntimeException</code><ul>
+<li><code>Exception-&gt;RuntimeException-&gt;IllegalArgumentExcetion-&gt;NumberFormatException</code></li><li><code>Exception</code>在程序中必须使用<code>try....catch</code>处理（出现异常能够执行）<code>public static int parseInt(String s) throws NumberFormatException</code></li><li><code>RuntimeException</code>可以不适用<code>try...catch</code>处理，但是出现异常，则交给JVM处理。（程序中断执行）</li></ul>
+</li><li>自定义异常</li></ul>
+<pre><code class="lang-java">class MyException extends Exception{
+    public MyException(String msg){
+        super(msg);
+    }
+}
+public class DefaultException{
+    public static void main(String args[]){
+        try{
+            throw new MyException(“自定义异常”);
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+}
+</code></pre>
+<ul>
+<li>断言</li></ul>
+<pre><code class="lang-java">1.assert boolean 表达式；
+2.assert boolean 表达式：详细信息；
+</code></pre>
+<ul>
+<li>参数 <code>-enableassertions</code>起作用需要<code>javac Test.java</code>,执行<code>java -ea Test</code></li><li>表达式1，出现<code>java.lang.AssertionError</code></li><li>表达式2，自己加信息，<code>java.lang.AssertError:&quot;自己加的信息&quot;</code><ul>
+<li>断言返回boolean，但是不能作为判断语句</li><li>检查的功能但是不提倡使用断言。</li></ul>
+</li></ul>
+<h2 id="6-">6.包和访问权限</h2>
+<p><code>package 包名称.子包名称；</code></p>
+<ul>
+<li><code>javac -d . PackageDemo01.java;java 包名.类名;</code></li><li>import <ul>
+<li><code>import 包名称.类名；---&gt;手动导入包</code></li><li><code>import 包名称.*;----&gt;JVM自动加载所需要的类</code></li><li>性能相同，不需要不导入。</li></ul>
+</li><li><code>public class</code> 和<code>class</code><ul>
+<li><strong>public class文件名称与类名称一致</strong>，<strong>一个类文件中只能有一个public class</strong>，<strong>使用class 类名和文件名不一致</strong>。</li><li>public 还具有访问权限的问题。pubic class 可被其他文件访问。</li></ul>
+</li><li>静态导入<ul>
+<li>一个类中所有方法都是static声明的静态方法，可用<code>import static 包.类.*；</code></li><li>静态导入，调用可以直接调用其中的方法，不必用,类.静态方法的形式。</li></ul>
+</li><li>jar 命令主要参数（java archive file ）<ul>
+<li><code>C</code>:创建新的文档</li><li><code>V</code>：生成详细的输出信息</li><li><code>F</code>：指定存档的文件名</li></ul>
+</li></ul>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

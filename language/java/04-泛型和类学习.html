@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>04-泛型和类学习</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<style type="text/css">
+.highlight  { background: #ffffff; }
+.highlight .c { color: #999988; font-style: italic } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { font-weight: bold } /* Keyword */
+.highlight .o { font-weight: bold } /* Operator */
+.highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
+.highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .gd .x { color: #000000; background-color: #ffaaaa } /* Generic.Deleted.Specific */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #999999 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .gi .x { color: #000000; background-color: #aaffaa } /* Generic.Inserted.Specific */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #aaaaaa } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { font-weight: bold } /* Keyword.Constant */
+.highlight .kd { font-weight: bold } /* Keyword.Declaration */
+.highlight .kp { font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #009999 } /* Literal.Number */
+.highlight .s { color: #d14 } /* Literal.String */
+.highlight .na { color: #008080 } /* Name.Attribute */
+.highlight .nb { color: #0086B3 } /* Name.Builtin */
+.highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
+.highlight .no { color: #008080 } /* Name.Constant */
+.highlight .ni { color: #800080 } /* Name.Entity */
+.highlight .ne { color: #990000; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #990000; font-weight: bold } /* Name.Function */
+.highlight .nn { color: #555555 } /* Name.Namespace */
+.highlight .nt { color: #000080 } /* Name.Tag */
+.highlight .nv { color: #008080 } /* Name.Variable */
+.highlight .ow { font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #009999 } /* Literal.Number.Float */
+.highlight .mh { color: #009999 } /* Literal.Number.Hex */
+.highlight .mi { color: #009999 } /* Literal.Number.Integer */
+.highlight .mo { color: #009999 } /* Literal.Number.Oct */
+.highlight .sb { color: #d14 } /* Literal.String.Backtick */
+.highlight .sc { color: #d14 } /* Literal.String.Char */
+.highlight .sd { color: #d14 } /* Literal.String.Doc */
+.highlight .s2 { color: #d14 } /* Literal.String.Double */
+.highlight .se { color: #d14 } /* Literal.String.Escape */
+.highlight .sh { color: #d14 } /* Literal.String.Heredoc */
+.highlight .si { color: #d14 } /* Literal.String.Interpol */
+.highlight .sx { color: #d14 } /* Literal.String.Other */
+.highlight .sr { color: #009926 } /* Literal.String.Regex */
+.highlight .s1 { color: #d14 } /* Literal.String.Single */
+.highlight .ss { color: #990073 } /* Literal.String.Symbol */
+.highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #008080 } /* Name.Variable.Class */
+.highlight .vg { color: #008080 } /* Name.Variable.Global */
+.highlight .vi { color: #008080 } /* Name.Variable.Instance */
+.highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
+.pl-c {
+    color: #969896;
+}
+
+.pl-c1,.pl-mdh,.pl-mm,.pl-mp,.pl-mr,.pl-s1 .pl-v,.pl-s3,.pl-sc,.pl-sv {
+    color: #0086b3;
+}
+
+.pl-e,.pl-en {
+    color: #795da3;
+}
+
+.pl-s1 .pl-s2,.pl-smi,.pl-smp,.pl-stj,.pl-vo,.pl-vpf {
+    color: #333;
+}
+
+.pl-ent {
+    color: #63a35c;
+}
+
+.pl-k,.pl-s,.pl-st {
+    color: #a71d5d;
+}
+
+.pl-pds,.pl-s1,.pl-s1 .pl-pse .pl-s2,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre,.pl-src,.pl-v {
+    color: #df5000;
+}
+
+.pl-id {
+    color: #b52a1d;
+}
+
+.pl-ii {
+    background-color: #b52a1d;
+    color: #f8f8f8;
+}
+
+.pl-sr .pl-cce {
+    color: #63a35c;
+    font-weight: bold;
+}
+
+.pl-ml {
+    color: #693a17;
+}
+
+.pl-mh,.pl-mh .pl-en,.pl-ms {
+    color: #1d3e81;
+    font-weight: bold;
+}
+
+.pl-mq {
+    color: #008080;
+}
+
+.pl-mi {
+    color: #333;
+    font-style: italic;
+}
+
+.pl-mb {
+    color: #333;
+    font-weight: bold;
+}
+
+.pl-md,.pl-mdhf {
+    background-color: #ffecec;
+    color: #bd2c00;
+}
+
+.pl-mdht,.pl-mi1 {
+    background-color: #eaffea;
+    color: #55a532;
+}
+
+.pl-mdr {
+    color: #795da3;
+    font-weight: bold;
+}
+
+.pl-mo {
+    color: #1d3e81;
+}
+.task-list {
+padding-left:10px;
+margin-bottom:0;
+}
+
+.task-list li {
+    margin-left: 20px;
+}
+
+.task-list-item {
+list-style-type:none;
+padding-left:10px;
+}
+
+.task-list-item label {
+font-weight:400;
+}
+
+.task-list-item.enabled label {
+cursor:pointer;
+}
+
+.task-list-item+.task-list-item {
+margin-top:3px;
+}
+
+.task-list-item-checkbox {
+display:inline-block;
+margin-left:-20px;
+margin-right:3px;
+vertical-align:1px;
+}
+</style>
+</head>
+<body>
+<h1 id="1-generics-">1.泛型(Generics)的应用</h1>
+<p>泛型就是指在对象建立时不指定类中的属性的具体类型，而是通过外部申明及实例化对象时指定的类型。</p>
+<p>泛型解决了类型安全转换的问题。</p>
+<p>泛型无法使用基本数据类型，必须设置成一个类，设置数字时候必选使用包装类。</p>
+<pre><code class="lang-java">[权限] class 类名&lt;泛型表示1，2，3&gt;{
+[权限] 泛型标识 变量名；
+[权限] 泛型类型标识 方法名称(){};
+[权限] 返回值类型声明 方法名称(泛型标识标识 变量名称);
+...
+}
+对象定义：
+类名称&lt;具体类&gt; 对象名称 =new 类名称&lt;类名称&gt;();
+</code></pre>
+<h1 id="2-">2.通配符</h1>
+<p>普通泛型操作都设置一个固定的类型，<strong>泛型操作中可以通过通配符接收任意类型的对象</strong>。</p>
+<p>使用<code>Info&lt;Object&gt;</code>，无法接收<code>Info&lt;Integer&gt;</code>.无法传递<code>Info&lt;?&gt; temp</code>,通配符解决。</p>
+<h2 id="2-1-">2.1 受限泛型</h2>
+<p>引用传递的过程中，可以设置一个泛型对象范围上限和范围下限。</p>
+<ul>
+<li>设置上限(<strong>extends继承于（小于</strong>)</li></ul>
+<pre><code>声明对象：类名称&lt;? extends 类&gt; 对象名称；
+定义类：[访问权限] 类名称&lt;泛型标识 extends 类&gt;{}
+</code></pre><ul>
+<li>设置下限(<strong>super大于后面类</strong>)</li></ul>
+<pre><code>声明对象：类名称&lt;? super 类&gt; 对象名称；
+定义类：[访问权限] 类名称&lt;泛型标识 extends 类&gt;{}
+</code></pre><p>泛型上限：假设对象是能是数字（Byte，short，long），必须指定接收对象指定上限。所有数字都是Number的子类.</p>
+<pre><code class="lang-java">public static void fun(Info&lt;? extends Number&gt; temp){}
+class Info&lt;T extends Number&gt;{}
+声明Info&lt;Integer&gt; i1=new Info&lt;Integer&gt;();
+</code></pre>
+<p>泛型的下限</p>
+<ul>
+<li>使用的泛型之恩那个在本类及父类类型上应用，必须使用范围下限进行配置。</li><li>泛型与子类继承的限制</li><li>一个子类可以通过对象多态性为其父类实例化，但是在泛型中，子类泛型类型无法使用父类泛型数据类型接受的。如Info<String> 不能使用Info<Object>接收。</li></ul>
+<h2 id="2-2-">2.2.泛型接口</h2>
+<pre><code>[权限] interface 接口名称&lt;泛型标识&gt;{}
+</code></pre><p>泛型接口两种实现方式</p>
+<ul>
+<li>直接在子类后声明泛型</li><li>直接在子类实现的接口明确给出泛型类型</li></ul>
+<pre><code class="lang-java">//1.子类声明为泛型(实例化子类同时也实例化了接口)
+class InfoTmp1&lt;T&gt; implements Info&lt;T&gt;
+//2.直接子类实现，明确指出接口类型
+class InfoTmp1 implements Info&lt;String&gt;
+</code></pre>
+<h2 id="2-3-">2.3泛型方法</h2>
+<p><strong>泛型方法的定义与其所在的类是否是泛型类是没有任何关系的</strong>，类可以是泛型也可以不是泛型。<br>泛型方法中可以定义泛型参数，参数的类型就是传入的数据</p>
+<pre><code>[权限] &lt;泛型标识&gt; 泛型标识 方法名称（[泛型标识 参数名称]）
+</code></pre><pre><code class="lang-java">class Demo{
+    public &lt;T&gt; T fun(T t){
+        return t;
+    }
+}
+Demo d=new Demo();
+String s=d.fun(&quot;李兴华&quot;);
+int i=d.fun(20);
+</code></pre>
+<ul>
+<li>通过泛型方法返回泛型类实例</li></ul>
+<pre><code class="lang-java">public static &lt;T extends Number&gt; Info&lt;T&gt; fun(T param){}
+</code></pre>
+<h2 id="2-4-">2.4泛型数组</h2>
+<pre><code class="lang-java">public class Demo6 {
+    public static void main(String args[]) {
+        Integer[] i = fun1(1, 2, 3, 4, 5, 6);
+        fun2(i);
+    }
+
+    private static &lt;T&gt; T[] fun1(T... args) {
+        return args;
+    }
+
+    private static &lt;T&gt; void fun2(T params[]) {
+        System.err.println(&quot;接收泛型数组&quot;);
+        for (T t : params) {
+            System.err.print(t + &quot;、 &quot;);
+        }
+        System.err.println();
+    }
+}
+</code></pre>
+<h1 id="3-">3.泛型的嵌套设置</h1>
+<pre><code class="lang-java">class InfoB&lt;K, V&gt; {
+    private K key;
+    private V value;
+
+    public InfoB(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public K getKey() {
+        return key;
+    }
+
+    public void setKey(K key) {
+        this.key = key;
+    }
+
+    public V getValue() {
+        return value;
+    }
+
+    public void setValue(V value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;InfoB{&quot; +
+                &quot;key=&quot; + key +
+                &quot;, value=&quot; + value +
+                &#39;}&#39;;
+    }
+}
+
+class Test&lt;S&gt; {
+    private S s;
+
+    public Test(S s) {
+        this.s = s;
+    }
+
+    public S getS() {
+        return s;
+    }
+
+    public void setS(S s) {
+        this.s = s;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Test{&quot; +
+                &quot;s=&quot; + s +
+                &#39;}&#39;;
+    }
+}
+
+public class Demo7 {
+    public static void main(String args[]) {
+        InfoB&lt;String, Integer&gt; info = new InfoB&lt;&gt;(&quot;李兴华&quot;, 30);
+        Test&lt;InfoB&lt;String, Integer&gt;&gt; infoBTest = new Test&lt;&gt;(info);
+        System.err.println(&quot;内容-：&quot; + infoBTest.getS().getKey());
+        System.err.println(&quot;内容二：&quot; + infoBTest.getS().getValue());
+    }
+}
+</code></pre>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
